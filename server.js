@@ -24,13 +24,13 @@ const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-
+console.log("data "+dbConfig.url);
 // Connecting to the database
 mongoose.connect(dbConfig.url)
 .then(() => {
     console.log("Successfully connected to the database");    
 }).catch(err => {
-    console.log('Could not connect to the database. Exiting now...');
+    console.log('Could not connect to the database. Exiting now...'+JSON.stringify(err));
     process.exit();
 });
 
@@ -85,8 +85,7 @@ apiRoutes.post('/authenticate', function(req, res) {
   });
 });
  
-// connect the api routes under /api/*
-app.use('/api', apiRoutes);
+
 
 apiRoutes.get('/memberinfo', passport.authenticate('jwt', { session: false}), function(req, res) {
   var token = getToken(req.headers);
@@ -122,12 +121,16 @@ getToken = function (headers) {
 };
 
 
+
 // define a simple route
 app.get('/', (req, res) => {
     res.json({"message": "Welcome to EasyNotes application. Take notes quickly. Organize and keep track of all your notes."});
 });
 
-require('./app/routes/note.routes.js')(app);
+require('./app/routes/note.routes.js')(app,apiRoutes,passport,jwt,User,dbConfig);
+
+// connect the api routes under /api/*
+app.use('/api', apiRoutes);
 
 // listen for requests
 app.listen(3000, () => {

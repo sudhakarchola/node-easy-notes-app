@@ -1,4 +1,4 @@
-FROM node:10.7.0-alpine
+FROM node:8.9.4-alpine
 MAINTAINER Sudhakar Mani <mail4sudhakar@gmail.com>
 
 RUN apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python
