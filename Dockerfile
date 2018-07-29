@@ -1,5 +1,8 @@
-FROM node:7.7-alpine
+FROM node:10.7.0-alpine
 MAINTAINER Sudhakar Mani <mail4sudhakar@gmail.com>
+
+RUN apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python
+RUN npm install --quiet node-gyp -g
 
 # install deps
 ADD package.json /tmp/package.json
